@@ -1,0 +1,45 @@
+# ── Python ────────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.egg
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# ── Virtual environments ──────────────────────────────────────────────────────
+venv/
+.venv/
+env/
+
+# ── IDE / OS ──────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ── Environment ───────────────────────────────────────────────────────────────
+.env
+
+# ── Node / JS ─────────────────────────────────────────────────────────────────
+node_modules/
+
+# ── Flask runtime ─────────────────────────────────────────────────────────────
+uploads/
+*.log
+
+# ═══════════════════════════════════════════════════════════════════════════════
+#  WHITELIST – project-specific datasets & model weights
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# Keep all static assets
+!assets/
+
+# Keep aiXplain cache (function / language / license definitions)
+!.aixplain_cache/
+!.aixplain_cache/*.json

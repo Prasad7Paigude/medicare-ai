@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["src*", "config*", "utils*"]
+
+[project]
+name = "medicare"
+version = "1.0.0"
+description = "MediCare – AI-powered healthcare management platform"
+requires-python = ">=3.10"
+dependencies = [
+    "flask==2.3.3",
+    "flask-cors==4.0.0",
+    "flask-mail==0.9.1",
+    "pymongo==4.6.1",
+    "python-dotenv==1.0.0",
+    "bcrypt==4.0.1",
+    "Werkzeug==2.3.7",
+    "aixplain==0.2.27",
+]
