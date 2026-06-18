@@ -38,8 +38,8 @@
 
 MediCare's core heuristic engine and end-to-end healthcare automation concept were battle-tested at the national level, achieving:
 
-- **🥇 5th Rank — IEMhacks 3.0 (National Level Hackathon):** Rapid prototype validated core triage logic and demonstrated product-market fit with judges and healthcare stakeholders
-- **🥉 3rd Rank — Pariyojana Pratiyogita:** Expanded scope to include logistics layer, reinforcing proof-of-concept for distributed hospital networks
+- **🥇 5th Rank — IEMhacks 3.0 (National Level Hackathon)**
+- **🥉 3rd Rank — Pariyojana Pratiyogita:** 
 
 Following this national validation, the entire codebase underwent a **rigorous production-hardening refactor:** the original monolithic rapid-prototype was decomposed into an 8-module, zero-trust architecture with strict separation of concerns, comprehensive error handling, and resilient fallback matrices. This evolution transformed a validated concept into **an operationally bulletproof platform ready for rural healthcare deployment.**
 
@@ -56,10 +56,10 @@ Following this national validation, the entire codebase underwent a **rigorous p
 └──────────────────────┬─────────────────────────────────────────┘
                        │ HTTPS/REST
                        │
-       ┌───────────────▼────────────────────────┐
-       │   Flask Application (Application        │
-       │   Factory Pattern, Blueprint Registry)  │
-       │                                         │
+       ┌───────────────▼───────────────────────┐
+       │   Flask Application (Application      │
+       │  Factory Pattern, Blueprint Registry) │
+       │                                       │
        │  ┌─────────────────────────────────┐  │
        │  │  Authentication Layer           │  │
        │  │  (signup, login, bcrypt hashing)│  │
@@ -68,7 +68,7 @@ Following this national validation, the entire codebase underwent a **rigorous p
        │  ┌─────────────────▼───────────────┐  │
        │  │  AI Doctor Agent Endpoint       │  │
        │  │  (aiXplain + Session State)     │  │
-       │  └─────────────────┬───────────────┘  │
+       │  └─────────────────┬───────────────┘  │ 
        │                    │                  │
        │  ┌─────────────────▼───────────────┐  │
        │  │  Hospital Bookings Blueprint    │  │
