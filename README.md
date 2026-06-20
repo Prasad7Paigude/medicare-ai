@@ -50,58 +50,37 @@ Following this national validation, the entire codebase underwent a **rigorous p
 ### End-to-End Data Flow
 
 ```
-┌────────────────────────────────────────────────────────────────┐
-│               MediCare Frontend (React/Vue)                    │
-│          Patient Portal, Doctor Dashboard, Admin UI            │
-└──────────────────────┬─────────────────────────────────────────┘
-                       │ HTTPS/REST
-                       │
-       ┌───────────────▼───────────────────────┐
-       │   Flask Application (Application      │
-       │  Factory Pattern, Blueprint Registry) │
-       │                                       │
-       │  ┌─────────────────────────────────┐  │
-       │  │  Authentication Layer           │  │
-       │  │  (signup, login, bcrypt hashing)│  │
-       │  └─────────────────┬───────────────┘  │
-       │                    │                  │
-       │  ┌─────────────────▼───────────────┐  │
-       │  │  AI Doctor Agent Endpoint       │  │
-       │  │  (aiXplain + Session State)     │  │
-       │  └─────────────────┬───────────────┘  │ 
-       │                    │                  │
-       │  ┌─────────────────▼───────────────┐  │
-       │  │  Hospital Bookings Blueprint    │  │
-       │  │  (Beds, Appointments, Medicine) │  │
-       │  └─────────────────┬───────────────┘  │
-       │                    │                  │
-       │  ┌─────────────────▼───────────────┐  │
-       │  │  Route Handlers & Validators    │  │
-       │  └─────────────────┬───────────────┘  │
-       │                    │                  │
-       └────────────────────┼──────────────────┘
-                            │
-        ┌───────────────────┼────────────────────────┐
-        │                   │                        │
-        │    ┌──────────────▼──────────┐    ┌────────▼────────┐
-        │    │  MongoDB Atlas Layer    │    │  Email Service  │
-        │    │  (Persistence)          │    │  (SMTP Fallback)│
-        │    │  - users collection     │    │  - Transactional│
-        │    │  - bookings collection  │    │    Email Queue  │
-        │    │  - sessions collection  │    │  - Graceful     │
-        │    │                         │    │    Degradation  │
-        │    └─────────────────────────┘    └─────────────────┘
-        │
-        │    ┌──────────────────────────┐
-        │    │  aiXplain AI Doctor      │
-        │    │  Agent (Llama 3.3 70B)   │
-        │    │  - Session State         │
-        │    │  - Google TTS Tool       │
-        │    │  - Microsoft NER Tool    │
-        │    │  - Fallback Matrix       │
-        │    └──────────────────────────┘
-        │
-        └────────────────────────────────────
+┌─────────────────────────────────────────────────────────┐
+│             MediCare Frontend (React/Vue)               │   
+└──────────────────────────┬──────────────────────────────┘
+                           │ HTTPS/REST
+           ┌───────────────▼───────────────┐
+           │    Flask Factory Application  │
+           │                               │
+           │  ┌─────────────────────────┐  │
+           │  │ Authentication Layer    │  │
+           │  └────────────┬────────────┘  │
+           │               │               │
+           │  ┌────────────▼────────────┐  │
+           │  │ AI Doctor Endpoint      │  │
+           │  └────────────┬────────────┘  │
+           │               │               │
+           │  ┌────────────▼────────────┐  │
+           │  │ Hospital Bookings       │  │
+           │  └────────────┬────────────┘  │
+           │               │               │
+           │  ┌────────────▼────────────┐  │
+           │  │ Route Handlers          │  │
+           │  └────────────┬────────────┘  │
+           └───────────────┬───────────────┘
+                           │
+       ┌───────────────────┼───────────────────┐
+       │                   │                   │
+┌──────▼──────┐     ┌──────▼──────┐     ┌──────▼──────┐
+│   MongoDB   │     │  aiXplain   │     │ SMTP Email  │
+│ (Atlas DB)  │     │ (Llama 70B) │     │  Service    │
+│ Persistence │     │ Diagnostics │     │ Degradation │
+└─────────────┘     └─────────────┘     └─────────────┘
 ```
 
 ### Directory Topology & Modular Architecture
