@@ -30,7 +30,7 @@
 
 ## National Validation
 
-- **1st Runners-up (5th Rank) — IEMhacks 3.0** (National Level Hackathon)
+- **5th Rank — IEMhacks 3.0** (National Level Hackathon)
 - **3rd Rank — Pariyojana Pratiyogita**
 
 Post-validation, the entire codebase was **production-hardened**: the monolithic prototype was decomposed into an 8-module, zero-trust architecture with strict separation of concerns, comprehensive error handling, and resilient fallback matrices. A validated concept, now an **operationally bulletproof platform.**
