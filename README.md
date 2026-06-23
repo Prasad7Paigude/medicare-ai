@@ -125,35 +125,26 @@ medicare-ai/
 
 ### 1. Stateful Session Management for aiXplain AI Doctor
 
-**Problem:** The raw aiXplain agent API resets conversational context on every call. Multi-turn symptom history is lost, forcing patients to re-explain their condition.
-
-**Solution:** A stateful wrapper (`AIDoctorAgent`) that maps user IDs to active aiXplain session IDs (O(1) lookup), automatically creating new sessions on first contact and resuming existing ones on follow-ups. Response extraction uses a structured fallback chain; if the agent is unavailable, a polished error message replaces the stack trace.
-
-**Integrated ModelTools:** Google TTS for speech-based consultation (low-literacy populations) + Microsoft NER for medical entity extraction.
-
-**Result:** Multi-turn continuity, sub-second session restoration, and accessible voice output — all without human intervention.
+- **Problem:** The raw aiXplain agent API resets conversational context on every call. Multi-turn symptom history is lost, forcing patients to re-explain their condition.
+- **Solution:** A stateful wrapper (`AIDoctorAgent`) that maps user IDs to active aiXplain session IDs (O(1) lookup), automatically creating new sessions on first contact and resuming existing ones on follow-ups. Response extraction uses a structured fallback chain; if the agent is unavailable, a polished error message replaces the stack trace.
+- **Integrated ModelTools:** Google TTS for speech-based consultation (low-literacy populations) + Microsoft NER for medical entity extraction.
+- **Result:** Multi-turn continuity, sub-second session restoration, and accessible voice output — all without human intervention.
 
 ### 2. Graceful Degradation & Micro-Backend Resilience
 
-**Problem:** Monolithic coupling means an SMTP crash takes down the entire platform. A lost MongoDB connection throws unhandled exceptions.
-
-**Solution:** Strictly decoupled Flask factory with independent fallback per service:
-
+- **Problem:** Monolithic coupling means an SMTP crash takes down the entire platform. A lost MongoDB connection throws unhandled exceptions.
+- **Solution:** Strictly decoupled Flask factory with independent fallback per service:
 - `connect_to_mongodb()` returns `None` on failure → routes issue 503 instead of crashing
 - `init_mail()` with pre-flight SMTP verification → logs a warning on failure, application continues
 - `AIDoctorAgent()` returns `None` if aiXplain keys are missing → routes handle `None` gracefully
-
 All initialization failures are logged with full context. No cascading failures. No silent crashes.
-
-**Result:** Zero cascading failures. Transparent degradation via 503 responses. Full observability at startup.
+- **Result:** Zero cascading failures. Transparent degradation via 503 responses. Full observability at startup.
 
 ### 3. Zero-Trust Security & Twelve-Factor Configuration
 
-**Problem:** Original hackathon code had MongoDB URIs, Gmail passwords, and aiXplain keys hardcoded. Credentials leaked into version control.
-
-**Solution:** A comprehensive security refactor moved all secrets to `config/settings.py` with strict `os.getenv()` injection. Every parameter has a documented fallback (empty string for required, sensible default for optional). Passwords are bcrypt-hashed with a 12-round work factor. The `.env` file is gitignored; only `.env.example` (with zero secrets) is tracked.
-
-**Result:** Zero hardcoded credentials. Same binary deploys to dev/staging/production with different env vars. HIPAA/GDPR-ready without architectural changes.
+- **Problem:** Original hackathon code had MongoDB URIs, Gmail passwords, and aiXplain keys hardcoded. Credentials leaked into version control.
+- **Solution:** A comprehensive security refactor moved all secrets to `config/settings.py` with strict `os.getenv()` injection. Every parameter has a documented fallback (empty string for required, sensible default for optional). Passwords are bcrypt-hashed with a 12-round work factor. The `.env` file is gitignored; only `.env.example` (with zero secrets) is tracked.
+- **Result:** Zero hardcoded credentials. Same binary deploys to dev/staging/production with different env vars. HIPAA/GDPR-ready without architectural changes.
 
 ---
 
