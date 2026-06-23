@@ -299,13 +299,3 @@ curl -X POST http://localhost:5000/order-medicines \
 ## License
 
 MIT — see [LICENSE](LICENSE).
-
----
-
-## Support
-
-[GitHub Issues](https://github.com/Prasad7Paigude/medicare-ai/issues) | [GitHub Discussions](https://github.com/Prasad7Paigude/medicare-ai/discussions)
-
----
-
-**Engineered for rural healthcare. Zero-trust by design. Production-hardened through national validation.**
