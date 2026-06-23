@@ -28,7 +28,7 @@
 
 ---
 
-## National Validation
+## Achievements
 
 - **5th Rank — IEMhacks 3.0** (National Level Hackathon)
 - **3rd Rank — Pariyojana Pratiyogita**
