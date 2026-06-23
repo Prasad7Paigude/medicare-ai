@@ -41,82 +41,82 @@ Post-validation, the entire codebase was **production-hardened**: the monolithic
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│             MediCare Frontend (React/Vue)               │
+│             MediCare Frontend (React/Vue)               │
 └──────────────────────────┬──────────────────────────────┘
-                           │ HTTPS/REST
-           ┌───────────────▼───────────────┐
-           │    Flask Factory Application  │
-           │                               │
-           │  ┌─────────────────────────┐  │
-           │  │ Authentication Layer    │  │
-           │  └────────────┬────────────┘  │
-           │               │               │
-           │  ┌────────────▼────────────┐  │
-           │  │ AI Doctor Endpoint      │  │
-           │  └────────────┬────────────┘  │
-           │               │               │
-           │  ┌────────────▼────────────┐  │
-           │  │ Hospital Bookings       │  │
-           │  └────────────┬────────────┘  │
-           │               │               │
-           │  ┌────────────▼────────────┐  │
-           │  │ Route Handlers          │  │
-           │  └────────────┬────────────┘  │
-           └───────────────┬───────────────┘
-                           │
-       ┌───────────────────┼───────────────────┐
-       │                   │                   │
-┌──────▼──────┐     ┌──────▼──────┐     ┌──────▼──────┐
-│   MongoDB   │     │  aiXplain   │     │ SMTP Email  │
-│ (Atlas DB)  │     │ (Llama 70B) │     │  Service    │
-│ Persistence │     │ Diagnostics │     │ Degradation │
-└─────────────┘     └─────────────┘     └─────────────┘
+                           │ HTTPS/REST
+           ┌───────────────▼───────────────┐
+           │    Flask Factory Application  │
+           │                               │
+           │  ┌─────────────────────────┐  │
+           │  │ Authentication Layer    │  │
+           │  └────────────┬────────────┘  │
+           │               │               │
+           │  ┌────────────▼────────────┐  │
+           │  │ AI Doctor Endpoint      │  │
+           │  └────────────┬────────────┘  │
+           │               │               │
+           │  ┌────────────▼────────────┐  │
+           │  │ Hospital Bookings       │  │
+           │  └────────────┬────────────┘  │
+           │               │               │
+           │  ┌────────────▼────────────┐  │
+           │  │ Route Handlers          │  │
+           │  └────────────┬────────────┘  │
+           └───────────────┬───────────────┘
+                           │
+       ┌───────────────────┼───────────────────┐
+       │                   │                   │
+┌──────▼──────┐     ┌──────▼──────┐     ┌──────▼──────┐
+│   MongoDB   │     │  aiXplain   │     │ SMTP Email  │
+│ (Atlas DB)  │     │ (Llama 70B) │     │  Service    │
+│ Persistence │     │ Diagnostics │     │ Degradation │
+└─────────────┘     └─────────────┘     └─────────────┘
 ```
 
 ### Module Topology
 
 ```
 medicare-ai/
-├── config/                          # Configuration & Environment Layer
-│   ├── __init__.py
-│   └── settings.py                  # Twelve-factor config: os.getenv() fallback matrix
-│                                     # (MongoDB, aiXplain keys, SMTP credentials, Flask params)
+├── config/                          # Configuration & Environment Layer
+│   ├── __init__.py
+│   └── settings.py                  # Twelve-factor config: os.getenv() fallback matrix
+│                                     # (MongoDB, aiXplain keys, SMTP credentials, Flask params)
 │
-├── src/                             # Core Business Logic & ML Integration
-│   ├── __init__.py
-│   ├── app.py                       # Flask Application Factory
-│   │                                 # (create_app(), blueprint registration, service init)
-│   ├── ai_doctor.py                 # aiXplain Agent Wrapper
-│   │                                 # (session management, message dispatch, fallback matrix)
-│   ├── auth.py                      # Authentication Blueprint
-│   │                                 # (signup, login, bcrypt hashing, email integration)
-│   ├── bookings.py                  # Hospital Logistics Blueprint
-│   │                                 # (appointments, bed reservations, medicine orders)
-│   ├── database.py                  # MongoDB Connection Manager
-│   │                                 # (singleton pattern, connection validation, ping checks)
-│   ├── email_service.py             # Transactional Email Pipeline
-│   │                                 # (Flask-Mail wrapper, SMTP pre-flight verification,
-│   │                                 #  graceful degradation on connection failure)
-│   └── routes.py                    # Primary API Route Handlers
-│                                     # (AI Doctor dispatch, health checks, utility endpoints)
+├── src/                             # Core Business Logic & ML Integration
+│   ├── __init__.py
+│   ├── app.py                       # Flask Application Factory
+│   │                                 # (create_app(), blueprint registration, service init)
+│   ├── ai_doctor.py                 # aiXplain Agent Wrapper
+│   │                                 # (session management, message dispatch, fallback matrix)
+│   ├── auth.py                      # Authentication Blueprint
+│   │                                 # (signup, login, bcrypt hashing, email integration)
+│   ├── bookings.py                  # Hospital Logistics Blueprint
+│   │                                 # (appointments, bed reservations, medicine orders)
+│   ├── database.py                  # MongoDB Connection Manager
+│   │                                 # (singleton pattern, connection validation, ping checks)
+│   ├── email_service.py             # Transactional Email Pipeline
+│   │                                 # (Flask-Mail wrapper, SMTP pre-flight verification,
+│   │                                 #  graceful degradation on connection failure)
+│   └── routes.py                    # Primary API Route Handlers
+│                                     # (AI Doctor dispatch, health checks, utility endpoints)
 │
-├── utils/                           # Cross-cutting Utilities
-│   ├── __init__.py
-│   └── logging_setup.py             # Structured logging configuration
-│                                     # (ISO 8601 timestamps, contextual field extraction)
+├── utils/                           # Cross-cutting Utilities
+│   ├── __init__.py
+│   └── logging_setup.py             # Structured logging configuration
+│                                     # (ISO 8601 timestamps, contextual field extraction)
 │
-├── frontend/                        # React/Vue Frontend Application
-│   │                                 # (Patient portal, doctor dashboard, appointment UI)
+├── frontend/                        # React/Vue Frontend Application
+│   │                                 # (Patient portal, doctor dashboard, appointment UI)
 │
-├── tests/                           # Test Suite
-│   │                                 # (Integration tests, unit tests, fixtures)
+├── tests/                           # Test Suite
+│   │                                 # (Integration tests, unit tests, fixtures)
 │
-├── pyproject.toml                   # PEP 517 build metadata, setuptools config
-├── requirements.txt                 # Pinned dependency versions (reproducible installs)
-├── .env.example                     # Environment template (documentation)
-├── server.py                        # Entry point (backward-compatible wrapper)
-├── LICENSE                          # MIT
-└── README.md                        # This document
+├── pyproject.toml                   # PEP 517 build metadata, setuptools config
+├── requirements.txt                 # Pinned dependency versions (reproducible installs)
+├── .env.example                     # Environment template (documentation)
+├── server.py                        # Entry point (backward-compatible wrapper)
+├── LICENSE                          # MIT
+└── README.md                        # This document
 ```
 
 ---
@@ -159,40 +159,53 @@ All initialization failures are logged with full context. No cascading failures.
 
 ## Enterprise Quick Start
 
-**Prerequisites:** Python 3.10+, MongoDB Atlas account (free tier), aiXplain API credentials, ~300 MB disk.
+<details>
+<summary><b>View Installation & Execution Commands</b></summary>
 
+### Prerequisites
+- **Python 3.10+** (tested on 3.10, 3.11)
+- **MongoDB Atlas account** (free tier available)
+- **aiXplain API credentials**
+- **~300 MB disk space**
+
+### Installation & First Run
 ```bash
 git clone https://github.com/Prasad7Paigude/medicare-ai.git
 cd medicare-ai
 python3 -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
-cp .env.example .env   # edit with your credentials
+cp .env.example .env   # edit with your credentials
 python server.py
 ```
 
-**On first execution:** Config validation → MongoDB ping → SMTP pre-flight → aiXplain agent init → Flask starts on `localhost:5000`.
+**On first execution:**
+- Config validation
+- MongoDB ping
+- SMTP pre-flight
+- aiXplain agent init
+- Flask starts on `localhost:5000`
 
-### API Endpoints
+### Example API Endpoints
 
 <details>
 <summary><code>POST /signup</code> — Register a patient account</summary>
 
 ```bash
 curl -X POST http://localhost:5000/signup \
-  -H "Content-Type: application/json" \
-  -d '{
-    "fullName": "Rajesh Kumar",
-    "email": "rajesh@example.com",
-    "phone": "9876543210",
-    "password": "SecurePassword123!"
-  }'
+  -H "Content-Type: application/json" \
+  -d '{
+    "fullName": "Rajesh Kumar",
+    "email": "rajesh@example.com",
+    "phone": "9876543210",
+    "password": "SecurePassword123!"
+  }'
 ```
 
 ```json
 {
-  "success": true,
-  "message": "Account created successfully!",
-  "user": { "id": "507f1f77bcf86cd799439011", "fullName": "Rajesh Kumar", "email": "rajesh@example.com" }
+  "success": true,
+  "message": "Account created successfully!",
+  "user": { "id": "507f1f77bcf86cd799439011", "fullName": "Rajesh Kumar", "email": "rajesh@example.com" }
 }
 ```
 </details>
@@ -202,17 +215,17 @@ curl -X POST http://localhost:5000/signup \
 
 ```bash
 curl -X POST http://localhost:5000/ai-doctor \
-  -H "Content-Type: application/json" \
-  -d '{
-    "user_id": "507f1f77bcf86cd799439011",
-    "message": "I have a high fever and severe cough for 3 days"
-  }'
+  -H "Content-Type: application/json" \
+  -d '{
+    "user_id": "507f1f77bcf86cd799439011",
+    "message": "I have a high fever and severe cough for 3 days"
+  }'
 ```
 
 ```json
 {
-  "success": true,
-  "message": "Based on your symptoms (high fever and severe cough for 3 days), this suggests either viral respiratory infection or early pneumonia. I recommend immediate consultation with a pulmonologist or general physician."
+  "success": true,
+  "message": "Based on your symptoms (high fever and severe cough for 3 days), this suggests either viral respiratory infection or early pneumonia. I recommend immediate consultation with a pulmonologist or general physician."
 }
 ```
 </details>
@@ -222,20 +235,20 @@ curl -X POST http://localhost:5000/ai-doctor \
 
 ```bash
 curl -X POST http://localhost:5000/book-bed \
-  -H "Content-Type: application/json" \
-  -d '{
-    "user_id": "507f1f77bcf86cd799439011",
-    "hospital": "Aravind Eye Hospital",
-    "admission_date": "2026-06-25",
-    "ward_type": "General Ward"
-  }'
+  -H "Content-Type: application/json" \
+  -d '{
+    "user_id": "507f1f77bcf86cd799439011",
+    "hospital": "Aravind Eye Hospital",
+    "admission_date": "2026-06-25",
+    "ward_type": "General Ward"
+  }'
 ```
 
 ```json
 {
-  "success": true,
-  "message": "Bed booked successfully!",
-  "booking_id": "bk_60a7e8c3d1f2a9b4c5d6e7f8"
+  "success": true,
+  "message": "Bed booked successfully!",
+  "booking_id": "bk_60a7e8c3d1f2a9b4c5d6e7f8"
 }
 ```
 </details>
@@ -245,23 +258,25 @@ curl -X POST http://localhost:5000/book-bed \
 
 ```bash
 curl -X POST http://localhost:5000/order-medicines \
-  -H "Content-Type: application/json" \
-  -d '{
-    "user_id": "507f1f77bcf86cd799439011",
-    "medicines": [
-      {"name": "Paracetamol 500mg", "quantity": 20},
-      {"name": "Amoxicillin 250mg", "quantity": 10}
-    ]
-  }'
+  -H "Content-Type: application/json" \
+  -d '{
+    "user_id": "507f1f77bcf86cd799439011",
+    "medicines": [
+      {"name": "Paracetamol 500mg", "quantity": 20},
+      {"name": "Amoxicillin 250mg", "quantity": 10}
+    ]
+  }'
 ```
 
 ```json
 {
-  "success": true,
-  "message": "Order placed successfully!",
-  "order_id": "od_70b8f9d4e2g3b0c5d6e7f8g9"
+  "success": true,
+  "message": "Order placed successfully!",
+  "order_id": "od_70b8f9d4e2g3b0c5d6e7f8g9"
 }
 ```
+</details>
+
 </details>
 
 ---
