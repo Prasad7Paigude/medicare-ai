@@ -9,7 +9,7 @@
 
 > **Live Production:** [https://aixplain-medicare.vercel.app/](https://aixplain-medicare.vercel.app/)
 >
-> **Status:** Production-ready. ~99.5% uptime. Zero-trust security. AI-powered diagnostic triage + automated hospital logistics for rural healthcare at scale.
+> **Status:** Production-ready. Zero-trust security. AI-powered diagnostic triage + automated hospital logistics for rural healthcare at scale.
 
 ---
 
